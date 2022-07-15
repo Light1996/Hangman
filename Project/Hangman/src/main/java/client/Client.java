@@ -5,10 +5,12 @@ import java.io.*;
 
 public class Client {
     private final int port;
+    public int room;
     public String userName;
 
     public Client(int port) {
         this.port = port;
+        this.room = 0;
     }
 
     public void execute() {
