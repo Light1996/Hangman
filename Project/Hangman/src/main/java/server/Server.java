@@ -9,14 +9,19 @@ public class Server {
     private final int port;
     private final Set<String> userNames;
     private final Set<User> userThreads;
+    public String word;
 
     public Server(int port) {
         this.userThreads = new HashSet<>();
         this.userNames = new HashSet<>();
         this.port = port;
+        this.word = "";
     }
 
     public void execute() {
+        String words[] = {"AMAZON","GOOGLE","ORACLE","ADOBE","FACEBOOK",
+            "MICROSOFT","APPLE","CISCO","INTEL","SAMSUNG","RAKUTEN","NVIDIA",
+            "DELL","ASUS","ACER","ACCENTURE","INFOSYS","WIPRO","PHILIPS","America"};
         try ( ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Chat Server is listening on port " + port);
             while (true) {
@@ -24,6 +29,9 @@ public class Server {
                 System.out.println("New user connected");
                 User newUser = new User(socket, this);
                 userThreads.add(newUser);
+                Random rand = new Random();
+                int ind = rand.nextInt(20);
+                this.word = words[ind];
                 newUser.start();
             }
         } catch (IOException ex) {
@@ -36,12 +44,26 @@ public class Server {
         Server server = new Server(port);
         server.execute();
     }
+    
+    boolean checkWord(String guess){
+        return this.word.toLowerCase().contains(guess);
+    }
+    
+    boolean checkWin(int points){
+        return (points/2)==this.word.length();
+    }
 
-    void broadcast(String message, User excludeUser) {
+    void broadcast(String message, int room, User excludeUser) {
         for (User aUser : userThreads) {
-            if (aUser != excludeUser) {
+            if (aUser != excludeUser && aUser.room == room) {
                 aUser.sendMessage(message);
             }
+        }
+    }
+    
+    void broadcast(String message) {
+        for (User aUser : userThreads) {
+            aUser.sendMessage(message);
         }
     }
 

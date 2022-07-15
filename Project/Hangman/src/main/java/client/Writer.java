@@ -28,14 +28,17 @@ public class Writer extends Thread {
         System.out.print("\nEnter your name: ");
         String userName = in.next();
         client.userName = userName;
+        System.out.print("\nEnter room no(1-10): ");
+        int room = in.nextInt();
+        client.room = room;
         writer.println(userName);
+        writer.println(room);
         String text;
         in.nextLine();
         do {
             System.out.print("[" + userName + "]: ");
             text = in.nextLine();
             writer.println(text);
-
         } while (!text.equals("bye"));
 
         try {
