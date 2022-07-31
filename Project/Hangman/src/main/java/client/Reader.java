@@ -1,36 +1,80 @@
 package client;
 
-import java.io.*;
-import java.net.*;
+public class Reader implements java.io.Serializable {
 
-public class Reader extends Thread {
+    public Integer tries;
+    public String guess;
+    public String message;
 
-    private BufferedReader reader;
-    private Client client;
-
-    public Reader(Socket socket, Client client) {
-        this.client = client;
-        try {
-            InputStream input = socket.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(input));
-        } catch (IOException ex) {
-            System.out.println("Error getting input stream: " + ex.getMessage());
-        }
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                String response = reader.readLine();
-                System.out.println("\n" + response);
-                if (client.userName != null) {
-                    System.out.print("[" + client.userName + "]: ");
-                }
-            } catch (IOException ex) {
-                System.out.println("Error reading from server: " + ex.getMessage());
+    public Reader(String level, String word) {
+        System.out.println("Level is:" + level);
+        switch (level) {
+            case "Easy":
+                this.tries = 20;
                 break;
-            }
+            case "Medium":
+                this.tries = 15;
+                break;
+            case "Hard":
+                this.tries = 10;
+                break;
+            case "Veteran":
+                this.tries = 5;
+                break;
+            default:
+                this.tries = 15;
+                break;
         }
+        this.guess = word;
+        this.message = "Welcome to the Hangman game! Guess a letter or the word";
     }
+
+    public void setWord(String str) {
+        this.guess = str;
+    }
+
+    public void disincrementCounter() {
+        this.tries--;
+    }
+
+    public void setLooseMessage() {
+        this.message = "Sorry, you lost the game!";
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public void setInvalidTryMessage(String l) {
+        this.message = "You have already tried letter " + l + " . Try another letter of the alphabet";
+    }
+
+    public void setCongratsMessage() {
+        this.message = "Congratulations! You won the server!";
+    }
+
+    public void setRetryMessage(String reply) {
+        this.message = "Letter " + reply + " is not contained. Sorry";
+    }
+
+    public void setFoundMessage() {
+        this.message = "Good job! You found a letter!";
+    }
+
+    public void setCounter(Integer attempts) {
+        this.tries = attempts;
+    }
+
+    public Integer getCounter() {
+        return this.tries;
+    }
+
+    public String getWord() {
+        return this.guess;
+    }
+
+    public void setscoresMessage(int c, int s) {
+        this.message = "Client is: " + c + "\n Server: " + s;
+    }
+
 }
