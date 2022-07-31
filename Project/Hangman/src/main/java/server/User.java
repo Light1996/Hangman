@@ -1,89 +1,93 @@
 package server;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
-public class User extends Thread {
+public class User {
 
-    private final Socket socket;
-    private final Server server;
-    private PrintWriter writer;
-    public int room;
-    public int points; 
+    File file;
+    String word;
+    String dashed;
+    List<Character> found;
 
-    public User(Socket socket, Server server) {
-        this.socket = socket;
-        this.server = server;
-        this.room = 0;
-        this.points = 0;
+    public User() throws FileNotFoundException {
+        this.found = new ArrayList<>();
+        this.file = getFile();
+        this.word = selectWord();
+        this.dashed = word.replaceAll(".", " _");
+        System.out.println("Word selected: " + word);
+
     }
 
-    @Override
-    public void run() {
-        try {
-            try (socket) {
-                InputStream input = socket.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                OutputStream output = socket.getOutputStream();
-                writer = new PrintWriter(output, true);
-                printUsers();
-                String userName = reader.readLine();
-                this.room = Integer.parseInt(reader.readLine());
-                server.addUserName(userName);
-                String serverMessage = "New user connected: " + userName;
-                server.broadcast(serverMessage, room, this);
-                char[] blanks = new char[server.word.length()];
-                for(int i=0;i<server.word.length();i++){
-                    blanks[i] = '_';
-                }
-                server.broadcast("Guess the following word\n");
-                String wordBlank = "";
-                for(int i=0;i<blanks.length;i++){
-                    wordBlank+=blanks[i]+" ";
-                }
-                server.broadcast(wordBlank);
-                String clientMessage;
-                do {
-                    clientMessage = reader.readLine();
-                    if(server.checkWord(clientMessage.toLowerCase())){
-                        for(int i=0;i<server.word.length();i++){
-                            if(server.word.toLowerCase().charAt(i)
-                                    == clientMessage.toLowerCase().charAt(0)){
-                                this.points+=2;
-                                blanks[i] = server.word.charAt(i);
-                            }
-                        }
-                        wordBlank="";
-                        for(int i=0;i<blanks.length;i++){
-                            wordBlank+=blanks[i]+" ";
-                        }
-                        server.broadcast(wordBlank);
-                        if(server.checkWin(points)){
-                            serverMessage = userName + " wins!!!";
-                            server.broadcast(serverMessage);
-                        }
-                    }
-                    serverMessage = "[" + userName + "]: " + clientMessage;
-                    server.broadcast(serverMessage, room, this);
-                } while (!clientMessage.equals("bye"));
-                server.removeUser(userName, this);
-                serverMessage = userName + " has quitted.";
-                server.broadcast(serverMessage, room, this);
+    public String getDashed() {
+        return generateDashes();
+    }
+
+    public void addToFound(Character c) {
+        this.found.add(c);
+    }
+
+    public boolean ifFoundListIncludes(char[] s) {
+        return found.contains(s[0]);
+    }
+
+    private String selectWord() throws FileNotFoundException {
+        String str = "";
+        do {
+            str = chooseWord();
+        } while ((!str.matches((".*\\d+.*"))) && (str.length() < 3));
+        return str;
+    }
+
+    public String getWord() {
+        return this.word;
+    }
+
+    private File getFile() {
+        URL url = getClass().getResource("words.txt");
+        file = new File("words.txt");
+        return file;
+    }
+
+    private String chooseWord() throws FileNotFoundException {
+        String result = null;
+        Random rand = new Random();
+        int n = 0;
+        for (Scanner sc = new Scanner(file); sc.hasNext();) {
+            ++n;
+            String line = sc.nextLine();
+            if (rand.nextInt(n) == 0) {
+                result = line.toLowerCase();
             }
-        } catch (IOException ex) {
-            System.out.println("Error in UserThread: " + ex.getMessage());
         }
+        return result;
     }
 
-    void printUsers() {
-        if (server.hasUsers()) {
-            writer.println("Connected users: " + server.getUserNames());
-        } else {
-            writer.println("No other users connected");
+    public String generateDashes() {
+        if (!found.isEmpty()) {
+            StringBuilder result = new StringBuilder(found.size());
+            found.stream().forEach((c) -> {
+                result.append(c);
+            });
+            String output = result.toString();
+            String except = "[^" + output + "]";
+            this.dashed = word.replaceAll(except, " _");
         }
+        return this.dashed;
+
     }
 
-    void sendMessage(String message) {
-        writer.println(message);
+    public boolean compareTotal(String guess) throws IOException {
+        return guess.equalsIgnoreCase(word);
+    }
+
+    public boolean checkCompleteness() {
+        return !this.dashed.contains("_");
     }
 }
