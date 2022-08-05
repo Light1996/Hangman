@@ -53,6 +53,8 @@ public class ClientGUI extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         scoreButton = new javax.swing.JButton();
         replayBtn = new javax.swing.JButton();
+        spectate = new javax.swing.JCheckBox();
+        correct = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hangman");
@@ -77,6 +79,11 @@ public class ClientGUI extends javax.swing.JFrame {
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -107,6 +114,25 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         });
 
+        spectate.setText("Spectate");
+        spectate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spectateActionPerformed(evt);
+            }
+        });
+
+        correct.setText("Correct");
+        correct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                correctMouseClicked(evt);
+            }
+        });
+        correct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                correctActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,33 +142,42 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(40, 40, 40)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(wordLabel)
-                                    .addComponent(gameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(inputField, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(counterLabel)))
-                                        .addGap(27, 27, 27)
-                                        .addComponent(jButton1))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(gameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(wordLabel)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(inputField, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel3)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(counterLabel)))
+                                                .addGap(27, 27, 27)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(correct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addContainerGap(29, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(scoreButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(replayBtn)
-                        .addGap(38, 38, 38))))
+                        .addGap(38, 38, 38))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(spectate, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,8 +202,12 @@ public class ClientGUI extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(correct))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(spectate)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
@@ -217,6 +256,23 @@ public class ClientGUI extends javax.swing.JFrame {
         connection.answer("scores");
     }//GEN-LAST:event_scoreButtonActionPerformed
 
+    private void spectateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spectateActionPerformed
+        if(spectate.isSelected())
+            inputField.setVisible(false);
+    }//GEN-LAST:event_spectateActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void correctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_correctActionPerformed
+        jButton1.setVisible(false);
+    }//GEN-LAST:event_correctActionPerformed
+
+    private void correctMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_correctMouseClicked
+        
+    }//GEN-LAST:event_correctMouseClicked
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -257,6 +313,7 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton correct;
     private javax.swing.JLabel counterLabel;
     private javax.swing.JLabel gameLabel;
     private javax.swing.JTextField inputField;
@@ -269,6 +326,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JButton replayBtn;
     private javax.swing.JButton scoreButton;
+    private javax.swing.JCheckBox spectate;
     private javax.swing.JLabel wordLabel;
     // End of variables declaration//GEN-END:variables
 
@@ -277,8 +335,10 @@ public class ClientGUI extends javax.swing.JFrame {
 
             @Override
             public void run() {
-                jLabel8.setText(jLabel8.getText() + " , " + text);
-                jLabel8.setVisible(true);
+                if(!level.equals("Hard")){
+                    jLabel8.setText(jLabel8.getText() + " , " + text);
+                    jLabel8.setVisible(true);
+                }
             }
         });
     }
