@@ -55,8 +55,14 @@ public class Controller extends Thread {
                 if (user.checkCompleteness()) {
                     reader.setCongratsMessage();
                     reader.setWord(user.word);
+                    switch (user_input.toCharArray()[0]) {
+                        case 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' -> writeScore("client");
+                    }
                     writeScore("client");
                 } else {
+                    switch (user_input.toCharArray()[0]) {
+                        case 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' -> writeScore("client");
+                    }
                     reader.setFoundMessage();
                     writeScore("client");
                 }
